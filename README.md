@@ -2,7 +2,7 @@
 
 **The Prime Column Transition Matrix Is a Boltzmann Distribution at Temperature ln(N)**
 
-Code and data for the paper by Tony M. (Fancyland LLC / Lattice OS).
+Code and data for the paper by Antonio P. Matos (Fancyland LLC / Lattice OS).
 
 ---
 
@@ -111,7 +111,7 @@ The scripts are numbered by "wave" — each wave represents one step in a 23-wav
 If you use this code or data, please cite:
 
 ```
-Tony M. (2026). "The Prime Column Transition Matrix Is a Boltzmann Distribution
+Antonio P. Matos (2026). "The Prime Column Transition Matrix Is a Boltzmann Distribution
 at Temperature ln(N)." Preprint. https://github.com/fancyland-llc/boltzmann-prime-transitions
 ```
 

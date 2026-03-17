@@ -1,6 +1,6 @@
 # The Prime Column Transition Matrix Is a Boltzmann Distribution at Temperature ln(N)
 
-**Author:** Tony M.  
+**Author:** Antonio P. Matos  
 **Date:** March 17, 2026  
 **Affiliation:** Independent Researcher; Fancyland LLC / Lattice OS  
 **Status:** Preprint  
@@ -12,6 +12,8 @@
 ## Abstract
 
 We show that the transition matrix governing consecutive primes between residue classes modulo $m$ is predicted by a Boltzmann distribution on the forward cyclic distances of the admissible residue group $(\mathbb{Z}/m\mathbb{Z})^*$, with temperature equal to the mean prime gap $\ln N$. The model has **zero free parameters**. At modulus 30, it achieves $R^2 \approx 0.970$ against empirical matrices measured across six orders of magnitude ($10^3$ to $10^9$), with the fitted decay rate converging to within 1.1% of the PNT prediction $\lambda = 1/\ln N$ at the largest measured scale. At modulus 210 (48 columns), $R^2 = 0.988$ at the largest scale, improving monotonically with $N$. The diagonal suppression discovered by Lemke Oliver and Soundararajan (2016) follows as a one-line corollary: self-transitions cost energy $m$ (a full modular cycle), making them the least probable transition at any finite temperature. The 3% residual is structured: it decomposes into a circulant component scaling as $O(1/\ln N)$ and a non-circulant component scaling as $O(1/\ln^{1.6} N)$. The Hardy-Littlewood singular series does not appear at any tested order (§5). The Boltzmann framing was first proposed by an AI worker (Gemini HELICASE) during a constrained swarm convergence run, then confirmed through a 22-wave adversarial falsification protocol (Appendix B).
+
+**Code and data:** https://github.com/fancyland-llc/boltzmann-prime-transitions
 
 ---
 
@@ -226,7 +228,7 @@ This research was conducted using Claude Opus 4 (Anthropic) and Gemini 3.1 Pro (
 
 ## Appendix A: Reproducibility
 
-All computations were performed with NumPy and SciPy on a standard consumer CPU. The segmented sieve covers primes to $10^9$ (50,847,534 primes; ~30 seconds). Source code is available in the project repository:
+All computations were performed with NumPy and SciPy on a standard consumer CPU. The segmented sieve covers primes to $10^9$ (50,847,534 primes; ~30 seconds). Source code is available at [github.com/fancyland-llc/boltzmann-prime-transitions](https://github.com/fancyland-llc/boltzmann-prime-transitions):
 
 - `backend/scripts/prime_drum_wave22c_boltzmann.py` — the zero-parameter model
 - `backend/scripts/prime_drum_wave22d_10e9.py` — the $10^9$ extension (segmented sieve)
