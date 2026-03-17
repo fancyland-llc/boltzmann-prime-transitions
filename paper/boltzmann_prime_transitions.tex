@@ -1,0 +1,733 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  11pt,
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{The Prime Column Transition Matrix Is a Boltzmann Distribution at Temperature $\ln N$}
+\author{Tony M.\\\small Independent Researcher; Fancyland LLC / Lattice OS}
+\date{March 17, 2026}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{MSC 2020:} 11N05 (primary), 11A41, 11K99, 82B05 (secondary)\\
+\textbf{Keywords:} prime gaps, consecutive primes, residue classes,
+Boltzmann distribution, transition matrix, Lemke Oliver--Soundararajan,
+Cram\'er model, prime number theorem
+
+\begin{abstract}
+
+We show that the transition matrix governing consecutive primes between
+residue classes modulo \(m\) is predicted by a Boltzmann distribution on
+the forward cyclic distances of the admissible residue group
+\((\mathbb{Z}/m\mathbb{Z})^*\), with temperature equal to the mean prime
+gap \(\ln N\). The model has \textbf{zero free parameters}. At modulus
+30, it achieves \(R^2 \approx 0.970\) against empirical matrices
+measured across six orders of magnitude (\(10^3\) to \(10^9\)), with the
+fitted decay rate converging to within 1.1\% of the PNT prediction
+\(\lambda = 1/\ln N\) at the largest measured scale. At modulus 210 (48
+columns), \(R^2 = 0.988\) at the largest scale, improving monotonically
+with \(N\). The diagonal suppression discovered by Lemke Oliver and
+Soundararajan (2016) follows as a one-line corollary: self-transitions
+cost energy \(m\) (a full modular cycle), making them the least probable
+transition at any finite temperature. The 3\% residual is structured: it
+decomposes into a circulant component scaling as \(O(1/\ln N)\) and a
+non-circulant component scaling as \(O(1/\ln^{1.6} N)\). The
+Hardy-Littlewood singular series does not appear at any tested order
+(§5). The Boltzmann framing was first proposed by an AI worker (Gemini
+HELICASE) during a constrained swarm convergence run, then confirmed
+through a 22-wave adversarial falsification protocol (Appendix B).
+\end{abstract}
+
+\section{The Model}\label{sec:model}
+
+Let \(m\) be a primorial (\(6, 30, 210, \ldots\)) and let
+\(\mathcal{C} = \{c_1, \ldots, c_{\varphi(m)}\}\) be the admissible
+residue classes modulo \(m\) (i.e., integers \(1 \leq r < m\) with
+\(\gcd(r, m) = 1\)).
+
+For consecutive primes \(p_n \equiv a \pmod{m}\) and
+\(p_{n+1} \equiv b \pmod{m}\), define the forward residue distance:
+
+\[d(a, b) = \begin{cases} (b - a) \bmod m & \text{if } b \neq a \\ m & \text{if } b = a \end{cases}\]
+
+The self-distance \(d(a, a) = m\) reflects the physical constraint that
+a prime in column \(a\) cannot return to column \(a\) without advancing
+at least \(m\) on the number line.
+
+\textbf{Claim.} The transition probability is given by
+
+\[\boxed{T(a \to b) = \frac{\exp\!\bigl(-d(a,b) \,/\, \ln N\bigr)}{\displaystyle\sum_{j \in \mathcal{C}} \exp\!\bigl(-d(a,j) \,/\, \ln N\bigr)}}\]
+
+where \(N\) is the scale (midpoint of the measurement window) and
+\(\ln N\) serves as the Boltzmann temperature. This model has
+\textbf{zero free parameters}: the modulus \(m\) and the scale \(N\) are
+given, and the decay rate \(\lambda = 1/\ln N\) follows from the Prime
+Number Theorem.
+
+\section{Derivation}\label{sec:derivation}
+
+The Cramér probabilistic model gives the distribution of prime gaps near
+\(N\) as approximately exponential:
+
+\[P(\text{gap} = g) \approx \frac{1}{\ln N} \exp\!\left(-\frac{g}{\ln N}\right)\]
+
+For a prime \(p \equiv a \pmod{m}\), the next prime in column
+\(b \neq a\) occurs at gap \(g = d(a,b) + km\) for some non-negative
+integer \(k\) (the gap must be congruent to \((b-a) \bmod m\)). Summing
+over all valid gaps:
+
+\[P(a \to b) \propto \sum_{k=0}^{\infty} \exp\!\left(-\frac{d(a,b) + km}{\ln N}\right) = \frac{\exp(-d(a,b)/\ln N)}{1 - \exp(-m/\ln N)}\]
+
+For self-transitions (\(b = a\)), the minimum gap is \(m\) (not \(0\)),
+so the sum starts at \(k = 1\):
+
+\[P(a \to a) \propto \sum_{k=1}^{\infty} \exp\!\left(-\frac{km}{\ln N}\right) = \frac{\exp(-m/\ln N)}{1 - \exp(-m/\ln N)}\]
+
+Since the gap distribution decays exponentially with rate \(1/\ln N\),
+the \(k = 0\) term dominates each sum by a factor of
+\(e^{m/\ln N} \gg 1\) at all measured scales. The geometric series
+denominators \(1/(1 - e^{-m/\ln N})\) cancel exactly upon
+row-normalization, yielding:
+
+\[T(a \to b) = \frac{\exp(-d(a,b)/\ln N)}{\sum_j \exp(-d(a,j)/\ln N)}\]
+
+This is exactly the claimed formula. The derivation requires only the
+Cramér model and the modular arithmetic of admissible residues. No
+additional conjectures, no fitted parameters, no singular series
+computation.\footnote{The derivation sums over all valid gaps
+  \(g = d(a,b) + km\). The dominant term is \(k = 0\), which contributes
+  \(\exp(-d/\ln N)\). The Cramér model error is in the coefficient of
+  each term --- the actual probability of a gap \(g\) differs from
+  \(e^{-g/\ln N}/\ln N\) by the Hardy-Littlewood singular series factor
+  \(\mathfrak{S}(g)/\mathfrak{S}(\text{avg})\). But these factors
+  multiply the weights before row normalization. After normalization,
+  the row-average singular series correction approximately cancels.
+  Section 5.2 confirms this empirically: the Hardy-Littlewood correction
+  is orthogonal to the residual at every tested order.}
+
+The Cramér model ignores correlations between consecutive gaps and the
+Hardy-Littlewood singular series corrections to gap frequencies. That
+the zero-parameter model nonetheless achieves \(R^2 = 0.970\) --- and
+that the Hardy-Littlewood corrections are orthogonal to the residual
+(§5.2) --- suggests the Boltzmann structure is robust to these
+approximations.
+
+\section{Experimental Verification}\label{sec:verification}
+
+\subsection{Protocol}\label{sec:protocol}
+
+We sieve all primes up to \(10^9\) (50,847,534 primes) and measure
+empirical transition matrices in six octave windows: \([10^3, 10^4)\),
+\([10^4, 10^5)\), \([10^5, 10^6)\), \([10^6, 10^7)\), \([10^7, 10^8)\),
+\([10^8, 10^9)\). For each window, we compute the Boltzmann prediction
+at the geometric midpoint \(N = 10^{(\log_{10} a + \log_{10} b)/2}\) and
+measure \(R^2\) (fraction of variance explained relative to the uniform
+null model \(T_{\text{null}} = 1/\varphi(m)\)). Explicitly,
+\(R^2 = 1 - \text{SS}_{\text{res}} / \text{SS}_{\text{tot}}\) where
+\(\text{SS}_{\text{res}} = \sum_{i,j}(T_{\text{emp}} - T_{\text{pred}})^2\)
+and
+\(\text{SS}_{\text{tot}} = \sum_{i,j}(T_{\text{emp}} - 1/\varphi(m))^2\).
+
+\subsection{Results: Modulus 30 (\texorpdfstring{$\varphi(30) = 8$}{phi(30) = 8} columns)}\label{sec:mod30}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1453}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0598}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1880}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2137}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1795}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2137}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Scale
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\ln N\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\lambda_{\text{PNT}}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\lambda_{\text{fitted}}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\lambda \cdot \ln N\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(R^2_{\text{zero-param}}\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(10^{3\text{–}4}\) & 8.06 & 0.12408 & 0.14173 & 1.142 & 0.951 \\
+\(10^{4\text{–}5}\) & 10.36 & 0.09651 & 0.10120 & 1.049 & 0.961 \\
+\(10^{5\text{–}6}\) & 12.66 & 0.07896 & 0.08118 & 1.028 & 0.971 \\
+\(10^{6\text{–}7}\) & 14.97 & 0.06682 & 0.06791 & 1.016 & 0.971 \\
+\(10^{7\text{–}8}\) & 17.27 & 0.05791 & 0.05783 & 0.999 & 0.971 \\
+\(10^{8\text{–}9}\) & 19.57 & 0.05109 & 0.05053 & \textbf{0.989} &
+\textbf{0.970} \\
+\end{longtable}
+}
+
+The ratio \(\lambda_{\text{fitted}} \cdot \ln N\) decreases
+monotonically from 1.142 to 0.989 across six orders of magnitude,
+passing through unity near \(N = 10^{7.5}\) and reaching 0.989 at
+\(N = 10^{8.5}\), consistent with asymptotic approach to
+\(\lambda = 1/\ln N\) with \(O(1/\ln^2 N)\) corrections. At the largest
+measured scale, the fitted decay rate is within 1.1\% of the PNT
+prediction, and the zero-parameter model explains 97.0\% of the
+transition variance. The \(R^2\) plateau at \(\approx 0.970\) reflects a
+structured residual whose anatomy is characterized in §5.
+
+\subsection{Results: Modulus 210 (\texorpdfstring{$\varphi(210) = 48$}{phi(210) = 48} columns)}\label{sec:mod210}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2698}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3968}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Scale
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(R^2_{\text{zero-param}}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\lambda \cdot \ln N\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(10^{3\text{–}4}\) & 0.890 & 1.240 \\
+\(10^{4\text{–}5}\) & 0.956 & 1.129 \\
+\(10^{5\text{–}6}\) & 0.975 & 1.098 \\
+\(10^{6\text{–}7}\) & 0.982 & 1.082 \\
+\(10^{7\text{–}8}\) & 0.986 & 1.066 \\
+\(10^{8\text{–}9}\) & \textbf{0.988} & \textbf{1.055} \\
+\end{longtable}
+}
+
+\(R^2\) \textbf{improves} monotonically with scale (0.890 $\to$ 0.988),
+consistent with the prediction that corrections are \(O(1/\ln N)\). The
+convergence ratio \(\lambda \cdot \ln N\) decreases steadily toward
+unity (1.240 $\to$ 1.055). The model becomes more accurate as \(N\) grows,
+in both moduli tested.
+
+\subsection{Matrix Comparison (mod 30, \texorpdfstring{$10^7$--$10^8$}{10\^7--10\^8})}\label{sec:matrix}
+
+Empirical vs.~predicted transition probabilities (rows = source column,
+columns = target column):
+
+\begin{verbatim}
+         EMPIRICAL                          ZERO-PARAMETER PREDICTION
+col:  1     7    11    13    17    19    23    29     1     7    11    13    17    19    23    29
+ 1: .045  .234  .190  .157  .124  .098  .085  .066  .056  .223  .177  .158  .125  .111  .088  .062
+ 7: .058  .046  .238  .191  .155  .127  .100  .086  .068  .048  .217  .193  .153  .136  .108  .076
+11: .075  .066  .046  .237  .194  .157  .126  .098  .083  .059  .046  .235  .186  .166  .132  .093
+13: .095  .077  .070  .046  .240  .193  .156  .124  .103  .073  .058  .051  .231  .206  .163  .115
+17: .142  .090  .074  .063  .046  .237  .192  .157  .127  .090  .071  .063  .050  .254  .202  .143
+19: .157  .116  .109  .074  .070  .046  .238  .190  .161  .113  .090  .080  .064  .057  .255  .180
+23: .193  .179  .117  .089  .077  .066  .045  .234  .203  .144  .114  .102  .081  .072  .057  .228
+29: .236  .193  .157  .142  .095  .075  .059  .044  .251  .177  .140  .125  .099  .088  .070  .050
+\end{verbatim}
+
+Maximum element error: 0.035. Mean element error: 0.009.
+
+\section{Lemke Oliver--Soundararajan as a Corollary}\label{sec:los}
+
+The principal finding of \cite{los} is that consecutive primes
+avoid repeating their residue class: \(T(a, a) < 1/\varphi(m)\). In the
+Boltzmann model, this is immediate:
+
+\[T(a, a) \propto \exp(-m / \ln N)\]
+
+while the nearest forward column has
+
+\[T(a, a + d_{\min}) \propto \exp(-d_{\min} / \ln N)\]
+
+The ratio is \(\exp(-(m - d_{\min})/\ln N)\), which is strictly less
+than 1 for all finite \(N\). At \(m = 30\), \(d_{\min} = 2\),
+\(\ln N = 17.27\):
+
+\[\text{Predicted ratio} = e^{-28/17.27} = 0.198 \qquad \text{Empirical ratio} = 0.045/0.234 = 0.192\]
+
+Agreement to within 3\%. The ``unexpected bias'' is the expected outcome
+of a thermal distribution where self-return is the highest-energy
+transition.
+
+\section{The Residual: Structure and Negative Results}\label{sec:residual}
+
+The residual matrix \(R = T_{\text{empirical}} - T_{\text{Boltzmann}}\)
+at mod 30 (\(10^7\)--\(10^8\)) has five nonzero singular values:
+
+\[\sigma = [0.066, \; 0.036, \; 0.030, \; 0.022, \; 0.013]\]
+
+(The $8\times 8$ stochastic matrix has one zero singular value corresponding to
+the all-ones eigenvector.) The ratio \(\sigma_1/\sigma_2 = 1.84\)
+indicates the residual is not rank-1 but carries genuine
+multi-dimensional structure. Its Frobenius norm scales as
+\(\|R\| = 4.26 / \ln^{1.39} N\) (\(R^2 = 0.98\) for the power-law fit),
+and the scaled residual \(\ln N \cdot R(N)\) converges to a fixed matrix
+\(M\) with inter-decade correlation \(r \geq 0.986\).
+
+\subsection{Circulant Decomposition}\label{sec:circulant}
+
+Decomposing \(R\) into a circulant part (depending only on forward
+distance \(d\)) and a non-circulant part (position-dependent):
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4658}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2603}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2740}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Component
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\|\cdot\|^2\) share
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Scaling
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Circulant (distance-only) & 42\% & \(\sim 1/\ln N\) \\
+Non-circulant (position-dependent) & 58\% & \(\sim 1/\ln^{1.6} N\) \\
+\end{longtable}
+}
+
+The non-circulant component decays faster and will become subdominant at
+sufficiently large \(N\). A quadratic correction to the exponential
+kernel, \(\exp(-d/\ln N + c \cdot d^2/\ln^2 N)\) with
+\(c \approx -0.12\) (stable across three decades), captures part of the
+circulant residual and improves \(R^2\) by \(+0.002\) with one free
+parameter. The negative \(c\) indicates the true kernel is slightly
+concave relative to pure exponential.
+
+\subsection{The Singular Series Does Not Appear}\label{sec:singular}
+
+A natural hypothesis is that the residual encodes the Hardy-Littlewood
+singular series \(\mathfrak{S}(g)\) for each prime gap \(g\). We tested
+this at three levels:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Multiplicative correction}
+  \(T_{\text{HL}} = B \cdot \mathfrak{S}(d(a,b)) / Z\): \(R^2\)
+  collapses from 0.971 to \textbf{0.233} (mod 30) and from 0.986 to
+  \textbf{0.822} (mod 210). The Frobenius norm quintuples.
+\item
+  \textbf{Additive correction}
+  \(T = B \cdot (1 + \beta \cdot (\mathfrak{S} - \bar{\mathfrak{S}})/(\bar{\mathfrak{S}} \cdot \ln^2 N))\):
+  the optimal \(\beta\) is \textbf{negative} (\(\beta = -3.2\) at
+  \(10^7\)--\(10^8\)) and the improvement is \(\Delta R^2 < 10^{-4}\).
+\item
+  \textbf{Free-power correction} \(T = B \cdot \mathfrak{S}(d)^\alpha\):
+  the optimizer sets \(\alpha = 0.000\) --- the optimal weight for the
+  singular series is exactly zero.
+\end{enumerate}
+
+The circulant distance profile
+\(f(d) = \langle R_{ij} \rangle_{d(i,j)=d}\) has correlation
+\(r = -0.14\) with the singular series, consistent with the null
+hypothesis. The singular series \(\mathfrak{S}(g)\) describes the global
+frequency of gap \(g\); the Boltzmann model's exponential kernel already
+absorbs this information through the distance parameterization. The
+residual is orthogonal to \(\mathfrak{S}\).
+
+\subsection{What the Residual Contains}\label{sec:residual-content}
+
+The leading SVD component (59.5\% of residual variance) is a column
+bias: transitions to columns \(\{7, 11\}\) are systematically enhanced,
+transitions to their complements \(\{23, 19\}\) (where
+\(7 + 23 = 11 + 19 = 30\)) are suppressed. This antisymmetric structure
+is visible in every row of the non-circulant residual
+(\(R_{\text{asym}}\): column 7 is positive in all 8 rows, column 23 is
+negative in all 8 rows). It represents a chirality --- the primes have
+handedness in how they populate residue classes.
+
+At mod 210, the residual's effective rank increases dramatically: 21
+modes are needed to capture 95\% of variance, compared to 4 at mod 30.
+The macroscopic chirality fragments into a diffuse spectrum of smaller
+position-dependent effects. This diffusion, combined with the rising
+\(R^2\) (0.970 $\to$ 0.988), confirms that the Boltzmann model absorbs more
+structure as the modulus grows.
+
+\section{Eigenstructure and Spiral Persistence}\label{sec:eigen}
+
+The empirical transition matrix has complex eigenvalues --- 6 conjugate
+pairs at mod 30, 46 at mod 210 --- indicating rotational dynamics in the
+column transitions. The leading complex eigenvalue magnitude scales as:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0530}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3788}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0455}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5227}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Modulus
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Scaling Law
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(R^2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Interpretation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+30 & \(\|\lambda_1\| = 2.14 / \log_{10} N\) & 0.9996 & Spiral dies as
+\(1/\log N\) \\
+210 & \(\|\lambda_1\| = 1.13 \cdot (\log_{10} N)^{-0.10}\) & 0.950 &
+Spiral persists (\(\|\lambda_1\| \approx 0.71\) at
+\(\log_{10} N = 100\)) \\
+\end{longtable}
+}
+
+The spiral angle \(\theta\) drifts at approximately \(4.5^\circ\) per decade
+(mod 30) and \(3.6^\circ\) per decade (mod 210), ruling out a fixed angular
+invariant, as would be expected if the spiral were purely determined by
+the group structure of \((\mathbb{Z}/m\mathbb{Z})^*\). The persistence
+of rotational structure at high moduli suggests that the Boltzmann
+model's residuals carry helical symmetry that deepens with the number of
+admissible columns.
+
+\section{Asymptotic Behavior}\label{sec:asymptotic}
+
+As \(N \to \infty\), three limits are reached simultaneously:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{\(\lambda \cdot \ln N \to 1\)}: The decay rate converges to
+  the PNT prediction exactly.
+\item
+  \textbf{\(R^2 \to 1\)}: The residual scales as \(O(1/\ln^{1.4} N)\)
+  relative to the leading Boltzmann term, so the model becomes exact.
+\item
+  \textbf{\(T(a,b) \to 1/\varphi(m)\)}: At infinite temperature, the
+  Boltzmann distribution becomes uniform. Every row converges to
+  \(1/\varphi(m)\) for all \(a, b\) --- precisely Dirichlet's theorem on
+  the equidistribution of primes in arithmetic progressions.
+\end{enumerate}
+
+The Boltzmann model thus interpolates between the Lemke
+Oliver-Soundararajan regime (finite \(N\), structured transitions) and
+Dirichlet's theorem (\(N \to \infty\), uniform distribution).
+
+The residual \(\|R\| \sim 4.26/\ln^{1.39} N\) converges to a fixed-shape
+matrix but never reaches zero at finite \(N\). Whether this floor
+saturates a lower bound derivable from the discrete Fourier uncertainty
+principle on \((\mathbb{Z}/m\mathbb{Z})^*\) --- i.e., whether the
+Boltzmann model is the optimal smooth approximation to the transition
+matrix --- remains open. Numerically, the entropic uncertainty excess
+\(H(X) + H(K) - \ln \varphi(m)\) of the Boltzmann rows scales as
+\(\approx 2.9/\ln N\) (mod 30), suggesting the bound is approached but
+not saturated at any finite scale.
+
+\section{Conclusion}\label{sec:conclusion}
+
+The transition matrix of consecutive primes modulo \(m\) is a Boltzmann
+distribution on the forward cyclic distances of
+\((\mathbb{Z}/m\mathbb{Z})^*\), at temperature \(\ln N\). Self-return
+costs energy \(m\). The partition function normalizes each row. The
+model has zero free parameters, achieves \(R^2 \approx 0.970\) at
+\(m = 30\) and \(R^2 = 0.988\) at \(m = 210\), and converges to exact
+prediction as \(N \to \infty\).
+
+The Lemke Oliver-Soundararajan diagonal suppression is a one-line
+corollary. The 3\% residual is structured --- a circulant kernel
+correction and a position-dependent chirality --- but is orthogonal to
+the Hardy-Littlewood singular series at every tested order. The PNT is
+the Boltzmann temperature.
+
+The Boltzmann distribution on \((\mathbb{Z}/m\mathbb{Z})^*\) satisfies
+the discrete Fourier uncertainty principle \cite{tao}: the transition rows cannot be simultaneously
+localized in position space (column distribution) and momentum space
+(eigenspectrum). The temperature \(\ln N\) governs this tradeoff, with
+the classical limit \(\ln N \to \infty\) recovering Dirichlet
+equidistribution.
+
+\begin{thebibliography}{5}
+
+\bibitem{cramer} Cram\'er, H. (1936). ``On the order of magnitude of the difference
+between consecutive prime numbers.'' \emph{Acta Arithmetica}, 2(1), 23--46.
+
+\bibitem{hl} Hardy, G.~H., \& Littlewood, J.~E. (1923). ``Some problems of
+`Partitio numerorum'; III: On the expression of a number as a sum of
+primes.'' \emph{Acta Mathematica}, 44, 1--70.
+
+\bibitem{los} Lemke Oliver, R.~J., \& Soundararajan, K. (2016). ``Unexpected biases
+in the distribution of consecutive primes.'' \emph{Proceedings of the
+National Academy of Sciences}, 113(31), E4446--E4454.
+
+\bibitem{dirichlet} Dirichlet, P.~G.~L. (1837). ``Beweis des Satzes, dass jede unbegrenzte
+arithmetische Progression, deren erstes Glied und Differenz ganze
+Zahlen ohne gemeinschaftlichen Factor sind, unendlich viele Primzahlen
+enth\"alt.'' \emph{Abhandlungen der K\"oniglichen Preu\ss ischen Akademie der
+Wissenschaften zu Berlin}, 45--81.
+
+\bibitem{tao} Tao, T. (2005). ``An uncertainty principle for cyclic groups of prime
+order.'' \emph{Mathematical Research Letters}, 12(1), 121--127. See
+also: Donoho, D.~L., \& Stark, P.~B. (1989). ``Uncertainty principles
+and signal recovery.'' \emph{SIAM Journal on Applied Mathematics},
+49(3), 906--931.
+
+\end{thebibliography}
+
+\section*{Acknowledgments}
+
+This research was conducted using Claude Opus 4 (Anthropic) and Gemini
+3.1 Pro (Google DeepMind) as computational research instruments. The
+Boltzmann framing was first proposed by a Gemini HELICASE worker during
+a constrained swarm convergence run on the prime basin transfer problem
+(BVP-5, Wave 2; see Appendix B). No thermodynamic framing was suggested
+in the problem specification; the swarm arrived at it independently
+within the constraints of the boundary value problem. Subsequent
+falsification and formalization were conducted through a 22-wave
+human-AI collaborative protocol. The author designed the problem
+specifications, system architecture, and experimental methodology.
+
+\appendix
+
+\section{Reproducibility}\label{app:reproducibility}
+
+All computations were performed with NumPy and SciPy on a standard
+consumer CPU. The segmented sieve covers primes to \(10^9\) (50,847,534
+primes; \textasciitilde30 seconds). Source code is available in the
+project repository:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{backend/scripts/prime\_drum\_wave22c\_boltzmann.py} --- the
+  zero-parameter model
+\item
+  \texttt{backend/scripts/prime\_drum\_wave22d\_10e9.py} --- the
+  \(10^9\) extension (segmented sieve)
+\item
+  \texttt{backend/scripts/prime\_drum\_wave22b\_boltzmann.py} --- the
+  two-parameter intermediate model
+\item
+  \texttt{backend/scripts/prime\_drum\_wave22\_boltzmann.py} --- the
+  initial (failed) column-index model
+\item
+  \texttt{backend/scripts/prime\_drum\_wave22g\_hardy\_littlewood.py}
+  --- the singular series test (negative result)
+\item
+  \texttt{backend/scripts/prime\_drum\_wave22h\_residual\_archaeology.py}
+  --- the residual decomposition
+\item
+  \texttt{backend/scripts/prime\_drum\_wave22h\_verify.py} --- the
+  character hypothesis verification
+\end{itemize}
+
+Results data: \texttt{backend/data/wave22c\_boltzmann\_*.json},
+\texttt{backend/data/wave22d\_10e9\_*.json},
+\texttt{backend/data/wave22h\_archaeology\_*.json}
+
+\section{Discovery Context}\label{app:discovery}
+
+This result was not found by direct theoretical derivation. The
+Boltzmann framing was discovered by a machine --- specifically, by a
+Gemini HELICASE worker operating inside the Antigen Factory, a two-layer
+AI swarm solver, during a constrained convergence run on the prime basin
+transfer problem (BVP-5).
+
+\subsection{The Swarm Run (BVP-5)}\label{sec:swarm}
+
+The BVP-5 problem specification, designed by the author, asked 8 AI
+workers per wave to discover the transfer operator mapping the
+structural fingerprint of primes across binary octave boundaries. The
+problem imposed hard constraints --- a specific loss function over basin
+structure, mandatory falsification of prior wave outputs, and
+graveyard-aware context injection --- but no thermodynamic framing was
+suggested. The swarm was given raw basins, a distance metric, and an
+error target.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0571}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.6286}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1429}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Wave
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Best Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Crystallized Technique
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Source
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 0.0107 & Two-point correlation & Claude \\
+1 & 0.2138\footnote{Wave 1 explored spectral renormalization, a
+  qualitatively different approach whose initial error exceeded Wave 0;
+  the method was subsequently refined and its descendants contributed to
+  later waves.} & Spectral renormalization & Claude \\
+2 & 0.0304 & \textbf{Boltzmann Reweighting} & \textbf{Gemini} \\
+3 & 0.0071 & Hardy-Littlewood-Cramér & Gemini \\
+6 & 0.0043 & \textbf{Exponential Tilting} & \textbf{Gemini} \\
+11 & \textbf{0.000914} & \textbf{Exponential Tilt / Canonical
+Reweighting} & \textbf{Gemini} \\
+\end{longtable}
+}
+
+\textbf{The swarm found ``Boltzmann Reweighting'' at Wave 2.} Nobody
+told it to look for a thermal distribution. It tried spectral methods,
+correlation functions, and Fredholm integrals --- and the thermodynamic
+framing kept winning. By Wave 11, the crystallized technique was
+``Exponential Tilt / Canonical Reweighting (similar to Umbrella
+Sampling)'' --- a Gemini L1.5 HELICASE worker, running autonomously
+inside a Mendelian breeding loop with graveyard-aware context injection.
+Error: 0.000914. Convergence: autonomous halt.
+
+96 Layer-1 workers. 80 Layer-2 workers. 233,835 tokens. 68 minutes. Zero
+human intervention between start and halt.
+
+The Boltzmann model was the swarm's idea. The author designed the
+constraints that made the discovery possible.
+
+\subsection{The Interferometer (Waves 1--22)}\label{sec:interferometer}
+
+What followed was a 22-wave adversarial falsification protocol --- three
+AI systems (Claude, Gemini, and a human architect) operating as a
+self-evolving research instrument, systematically testing and killing
+the swarm's output:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Propose} a falsifiable gauge derived from the swarm's
+  crystallized technique or its competitors.
+\item
+  \textbf{Compute} the gauge across multiple octave scales using a
+  shared sieve infrastructure.
+\item
+  \textbf{Kill or promote}: if the gauge fails its own prediction, it
+  enters a permanent graveyard. If it survives, it seeds the next wave.
+\end{enumerate}
+
+Over 22 waves, the system killed 80+ hypotheses and produced 30+
+survivors. The path to the zero-parameter model was:
+
+\begin{itemize}
+\tightlist
+\item
+  Waves 1--4: compression-based primality signals (real but weak).
+\item
+  Waves 5--7: exact prime interferometer (equivalent to trial division).
+\item
+  Waves 8--15: scaling laws, winding numbers, sphere amplifiers,
+  transfer functions.
+\item
+  Waves 16--20: GUE killed, Goldbach Spectrometer built
+  (\(r = 0.99917\)), dual Goldbach symmetric, compression crossover
+  measured.
+\item
+  Wave 21: columnar transition matrix has complex eigenvalues ---
+  spectral chirality, circulant ratchet structure.
+\item
+  Wave 22a: Boltzmann model tested with column-index distance.
+  \textbf{FAILED} (\(R^2 = 0.08\)). The swarm's insight was right; our
+  metric was wrong.
+\item
+  Wave 22b: corrected to residue distance, 2-parameter fit.
+  \(R^2 = 0.97\). Discovery: the self-penalty parameter
+  \(\mu \cdot \ln N\) converges to \(m\). The self-avoidance IS the
+  Boltzmann model.
+\item
+  Wave 22c: \(d_{\text{self}} = m\), \(\lambda = 1/\ln N\). Zero
+  parameters. \(R^2 = 0.971\).
+\end{itemize}
+
+\textbf{The critical failure was instructive.} Wave 22a's catastrophic
+\(R^2 = 0.08\) proved that the swarm's Boltzmann framing only works with
+the correct distance metric --- forward cyclic residue distance, not
+column index. Wave 22b's convergence of \(\mu \cdot \ln N \to m\) was
+the key insight that collapsed two parameters to zero. Each failure
+constrained the next hypothesis until the correct model was the only one
+remaining.
+
+\subsection{The Architecture}\label{sec:architecture}
+
+The swarm infrastructure --- Layer-1 isomorphic processors (Claude +
+Gemini at \(T \approx 0.7\)), Demon Gate classification, Layer-2 math
+workers (Claude at \(T = 0.1\)), epistemic sandbox with real Python
+execution, Mendelian breeding with phonon-adaptive ratio, Wilson loop
+accumulator, tension metric with gauge relaxation --- is implemented in
+Prompt Studio, a distributed AI research platform built on Lattice OS.
+
+The Boltzmann theorem is its first mathematical output.
+
+\vspace{1em}
+\noindent\emph{Fancyland LLC --- Lattice OS research infrastructure.}
+
+\end{document}

@@ -1,0 +1,27 @@
+{
+  "wave": "22h",
+  "title": "Residual Archaeology",
+  "timestamp": 1773772751325,
+  "mod30": {
+    "R2_boltzmann": 0.970985353662462,
+    "norm_R": 0.0852913645938192,
+    "circulant_fraction": 0.4195979558020336,
+    "asymmetric_fraction": 0.5804020441979663,
+    "svd_top5": [
+      0.0657972839554074,
+      0.03576387030759091,
+      0.02961361399733459,
+      0.022296194249939838,
+      0.013052468293861872
+    ],
+    "homeostasis_corr": -0.14072699381955744
+  },
+  "mod210": {
+    "R2_boltzmann": 0.9857087993009639,
+    "norm_R": 0.28449403314777055,
+    "circulant_fraction": 0.274758259680711,
+    "asymmetric_fraction": 0.7252417403192886,
+    "homeostasis_corr": -0.09549207239295517
+  },
+  "elapsed_seconds": 3.3
+}

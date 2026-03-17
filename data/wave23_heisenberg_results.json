@@ -1,0 +1,17 @@
+{
+  "mod_30": {
+    "planck_limit": 2.0794415416798357,
+    "peak_excess": 0.49969687633035736,
+    "peak_excess_pct": 24.030340180983742,
+    "peak_ln_N": 4.879504816756785,
+    "empirical_mean_excess": 0.20799490545517896,
+    "empirical_mean_excess_pct": 10.00244062101185,
+    "boltzmann_mean_excess": 0.19351551436693076,
+    "boltzmann_mean_excess_pct": 9.306129097074933,
+    "random_mean_excess": 0.38936578116608295,
+    "random_mean_excess_pct": 18.724536052672175,
+    "random_std_excess": 0.09591657808538429,
+    "boltzmann_percentile_vs_random": 2.564,
+    "scaling_law_alpha": 0.9702864507538509
+  }
+}
