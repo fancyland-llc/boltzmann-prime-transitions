@@ -1,9 +1,11 @@
 # The Prime Column Transition Matrix Is a Boltzmann Distribution at Temperature ln(N)
 
 **Author:** Antonio P. Matos  
+**ORCID:** [0009-0002-0722-3752](https://orcid.org/0009-0002-0722-3752)  
 **Date:** March 17, 2026  
 **Affiliation:** Independent Researcher; Fancyland LLC / Lattice OS  
 **Status:** Preprint  
+**DOI:** [10.5281/zenodo.19076680](https://doi.org/10.5281/zenodo.19076680)  
 **MSC 2020:** 11N05 (primary), 11A41, 11K99, 82B05 (secondary)  
 **Keywords:** prime gaps, consecutive primes, residue classes, Boltzmann distribution, transition matrix, Lemke Oliver–Soundararajan, Cramér model, prime number theorem
 

@@ -4,6 +4,8 @@
 
 Code and data for the paper by Antonio P. Matos (Fancyland LLC / Lattice OS).
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19076680.svg)](https://doi.org/10.5281/zenodo.19076680)
+
 ---
 
 ## The Result
@@ -112,7 +114,9 @@ If you use this code or data, please cite:
 
 ```
 Antonio P. Matos (2026). "The Prime Column Transition Matrix Is a Boltzmann Distribution
-at Temperature ln(N)." Preprint. https://github.com/fancyland-llc/boltzmann-prime-transitions
+at Temperature ln(N)." Preprint. DOI: 10.5281/zenodo.19076680
+https://doi.org/10.5281/zenodo.19076680
+ORCID: https://orcid.org/0009-0002-0722-3752
 ```
 
 ---
@@ -125,3 +129,6 @@ MIT License. See [LICENSE](LICENSE).
 
 _Fancyland LLC — Lattice OS research infrastructure._
 *https://www.fancyland.net*
+
+**DOI:** [10.5281/zenodo.19076680](https://doi.org/10.5281/zenodo.19076680)  
+**ORCID:** [0009-0002-0722-3752](https://orcid.org/0009-0002-0722-3752)
